@@ -2,7 +2,12 @@ from fastapi import FastAPI, Query, Depends
 from datetime import date
 from pydantic import BaseModel
 
+from app.vacancies.router import router as router_vacancies
+
 app = FastAPI()
+
+
+app.include_router(router_vacancies)
 
 class SVacancy(BaseModel):
     name: str
@@ -28,17 +33,17 @@ class SVacanciesSearchArgs:
         self.actual = actual
 
 
-@app.get("/vacancies")
-def get_vacancies(
-        search_args: SVacanciesSearchArgs = Depends()
-) -> list[SVacancy]:
-    vacancies = [
-        {
-            "name": "Разработчик Python",
-            "area": "Москва",
-            "published_at": '2023-12-12',
-            "skills": ['Python', 'Javascript'],
-            "actual": True,
-        }
-    ]
-    return vacancies
+# @app.get("/vacancies")
+# def get_vacancies(
+#         search_args: SVacanciesSearchArgs = Depends()
+# ) -> list[SVacancy]:
+#     vacancies = [
+#         {
+#             "name": "Разработчик Python",
+#             "area": "Москва",
+#             "published_at": '2023-12-12',
+#             "skills": ['Python', 'Javascript'],
+#             "actual": True,
+#         }
+#     ]
+#     return vacancies
