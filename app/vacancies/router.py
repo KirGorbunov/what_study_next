@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from app.vacancies.dao import VacanciesDAO
 
 
 router = APIRouter(
@@ -8,5 +9,5 @@ router = APIRouter(
 
 
 @router.get("")
-def get_vacancies():
-    pass
+async def get_vacancies():
+    return await VacanciesDAO.find_all()
