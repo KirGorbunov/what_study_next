@@ -3,11 +3,14 @@ from datetime import date
 from pydantic import BaseModel
 
 from app.vacancies.router import router as router_vacancies
+from app.users.router import router as router_users
+
 
 app = FastAPI()
 
-
+app.include_router(router_users)
 app.include_router(router_vacancies)
+
 
 class SVacancy(BaseModel):
     name: str
