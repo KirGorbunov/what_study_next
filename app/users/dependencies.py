@@ -10,7 +10,7 @@ from app.users.dao import UsersDAO
 def get_token(request: Request):
     token = request.cookies.get("what_study_access_token")
     if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Токен отсутсвует")
     return token
 
 async def get_current_user(token: str = Depends(get_token)):
@@ -19,10 +19,10 @@ async def get_current_user(token: str = Depends(get_token)):
             token, settings.SECRET_KEY, settings.ALGORITHM
         )
     except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверный формат токена")
     expire: str = payload.get("exp")
     if (not expire) or (expire < datetime.utcnow().timestamp()):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Токен истек")
     user_id: str = payload.get("sub")
     if not user_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
